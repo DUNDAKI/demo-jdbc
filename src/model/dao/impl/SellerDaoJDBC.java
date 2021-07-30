@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,8 +25,35 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public void insert(Seller obj) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("INSERT INTO seller " + "(Name, Email, BirthDate, BaseSalary, DepartmentId) "
+					+ "VALUES " + "(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
+			st.setString(1, obj.getName());
+			st.setString(2, obj.getEmail());
+			st.setDate(3, new java.sql.Date(obj.getBirthDate().getTime()));
+			st.setDouble(4, obj.getBaseSalary());
+			st.setInt(5, obj.getDepartment().getId());
+
+			int rows = st.executeUpdate();
+
+			if (rows > 0) {
+				ResultSet rs = st.getGeneratedKeys();
+				if (rs.next()) {
+					int id = rs.getInt(1);
+					obj.setId(id);
+				}
+			} else {
+				throw new DbException("Nenhuma linha foi alterada ");
+			}
+
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+			DB.closeConnection();
+		}
 	}
 
 	@Override
@@ -94,12 +122,9 @@ public class SellerDaoJDBC implements SellerDao {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT seller.*,department.Name as DepName " 
-							+ "FROM seller INNER JOIN department "
-							+ "ON seller.DepartmentId = department.Id "
-							+ "ORDER BY Name");
+					"SELECT seller.*,department.Name as DepName " + "FROM seller INNER JOIN department "
+							+ "ON seller.DepartmentId = department.Id " + "ORDER BY Name");
 
-			
 			rs = st.executeQuery();
 			List<Seller> list = new ArrayList<Seller>();
 			Map<Integer, Department> map = new HashMap<>();
@@ -122,7 +147,7 @@ public class SellerDaoJDBC implements SellerDao {
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
-			
+
 		}
 	}
 
@@ -159,12 +184,9 @@ public class SellerDaoJDBC implements SellerDao {
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
-			
+
 		}
-		
-		
+
 	}
-	
-	
 
 }
