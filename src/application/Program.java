@@ -32,11 +32,7 @@ public class Program {
 //			System.out.println(obj);
 //		}
 		
-		System.out.println("\n=== TEST 3: seller findAll =====");
-		list = sellerDao.findAll();
-		for (Seller obj : list) {
-			System.out.println(obj);
-		}
+		
 
 //		System.out.println("\n=== TEST 4: seller insert =====");
 //		Seller newSeller = new Seller(null, "Amanda", "amanda@gmail.com", new Date(), 500.0, department);
@@ -50,7 +46,18 @@ public class Program {
 //		sellerDao.update(seller);
 //		System.out.println("Update completed");
 		
+		System.out.println("\n=== TEST : seller delete =====");
+		System.out.println("Enter  id for delete: ");
+		int id =  sc.nextInt();
+		sellerDao.deleteById(id);
+		System.out.println("Deleted sucess");
 		
+		System.out.println("\n=== TEST 3: seller findAll =====");
+		list = sellerDao.findAll();
+		for (Seller obj : list) {
+			System.out.println(obj);
+		}
+
 		sc.close();
 	}
 }
