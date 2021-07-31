@@ -4,16 +4,19 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Seller implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
+
 	private Integer id;
-	private String name, email;
+	private String name;
+	private String email;
 	private Date birthDate;
 	private Double baseSalary;
 	
 	private Department department;
 	
-	public Seller() {}
+	public Seller() {
+	}
 
 	public Seller(Integer id, String name, String email, Date birthDate, Double baseSalary, Department department) {
 		this.id = id;
@@ -99,9 +102,7 @@ public class Seller implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Seller [id=" + id + ", name=" + name + ", email=" + email + ", birthDate=" + birthDate + ", baseSalary="
-				+ baseSalary + ", department=" + department + "]";
+		return " Seller [id = " + id + "\n name = " + name + "\n email = " + email + "\n birthDate = " + birthDate + "\n baseSalary = "
+				+ baseSalary + "\n department = " + department + "]";
 	}
-	
-	
 }
